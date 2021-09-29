@@ -15,4 +15,7 @@
 vendor/
 tmp/
 roi-takeoff-user58-7eabc5b324a2.json
-
+.idea/*
+.terraform.*
+.terraform
+*.iml
