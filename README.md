@@ -1,5 +1,5 @@
 # go-pets
-# Prerequisites:
+Prerequisites:
 1. Need a Google Cloud Project created (project ID)
 2. Create service account with access right: Owner, Datastore Editor.
 3. Need to create a Service Account with access rights - Owner, Datastore Editor
