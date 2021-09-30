@@ -14,4 +14,4 @@ To destroy execute: ./end.sh
 
 For POST API that adds new record to DB use the following CURL command (you can update the field values):
 
-curl -X POST -H "Content-Type: application/json"  -d '{"Added":"2021-09-28T10:02:04.274Z","Caption":"best cat ever","Email":"test5@mail.com","Image":"https://www.google.com/url?sa=i&url=https%3A%2F%2Funsplash.com%2Fimages%2Fanimals%2Fkitten&psig=AOvVaw0DB2tLQeA2b9lWh41yVymy&ust=1633075823352000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCKDN1dSfpvMCFQAAAAAdAAAAABAP","Likes":500,"Owner":"Renaud","Petname":"Lyon"}' https://go-pets-app-edtahor7iq-lm.a.run.app/pets
+curl -X POST -H "Content-Type: application/json"  -d '{"Added":"2021-09-28T10:02:04.274Z","Caption":"best cat ever","Email":"test5@mail.com","Image":"https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1740&q=80","Likes":500,"Owner":"Renaud","Petname":"Lyon"}' https://go-pets-app-edtahor7iq-lm.a.run.app/pets
