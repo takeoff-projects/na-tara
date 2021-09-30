@@ -2,12 +2,15 @@ package main
 
 import (
 	"bytes"
+	"drehnstrom.com/go-pets/petsdb"
+	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"html/template"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
-	"drehnstrom.com/go-pets/petsdb"
 )
 
 var projectID string 
@@ -27,18 +30,22 @@ func main() {
 	log.Printf("Port set to: %s", port)
 
 	fs := http.FileServer(http.Dir("assets"))
-	mux := http.NewServeMux()
+	//mux := http.NewServeMux()
+	router := mux.NewRouter().StrictSlash(true)
 
 	// This serves the static files in the assets folder
-	mux.Handle("/assets/", http.StripPrefix("/assets/", fs))
+	router.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
 	// The rest of the routes
-	mux.HandleFunc("/", indexHandler)
-	mux.HandleFunc("/about", aboutHandler)
+	router.HandleFunc("/", indexHandler)
+	router.HandleFunc("/about", aboutHandler)
+	router.HandleFunc("/pets", getPets).Methods("GET")
+	router.HandleFunc("/pet/{id}",getPetbyID).Methods("GET")
+	router.HandleFunc("/pets", createPet).Methods("POST")
 
 
 	log.Printf("Webserver listening on Port: %s", port)
-	http.ListenAndServe(":"+port, mux)
+	http.ListenAndServe(":"+port, router)
 }
 	
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -97,3 +104,39 @@ type AboutPageData struct {
 	PageTitle string
 }
 
+func getPets(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Endpoint Hit: getPets")
+	pets, error := petsdb.GetPets()
+	if error != nil {
+		fmt.Print(error)
+	}
+	json.NewEncoder(w).Encode(pets)
+}
+
+func getPetbyID(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Endpoint Hit: getPetbyID")
+	vars := mux.Vars(r)
+	key := vars["id"]
+
+	fmt.Printf("Key: %s\n", key)
+	pets, error := petsdb.GetPetbyId(key)
+	if error != nil {
+		fmt.Print(error)
+	}
+	json.NewEncoder(w).Encode(pets)
+}
+
+func createPet(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Endpoint Hit: createPet")
+	//newID := uuid.New().String()
+	//fmt.Println(newID)
+
+	reqBody, _ := ioutil.ReadAll(r.Body)
+	var pet petsdb.Pet
+	json.Unmarshal(reqBody, &pet)
+	//pet.id = newID
+
+	petsdb.CreatePet(pet)
+
+	json.NewEncoder(w).Encode(pet)
+}
